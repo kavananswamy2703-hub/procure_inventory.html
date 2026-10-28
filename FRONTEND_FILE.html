@@ -1,0 +1,1258 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Procurement & Inventory | Small Manufacturer</title>
+    <style>
+      :root {
+        --navy: #17324d;
+        --blue: #2463a6;
+        --light-blue: #eaf2fb;
+        --bg: #f4f7fb;
+        --text: #243447;
+        --muted: #64748b;
+        --border: #dce4ee;
+        --green: #16845b;
+        --orange: #b86b12;
+        --red: #bd3b3b;
+        --white: #fff;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+      header {
+        background: var(--navy);
+        color: white;
+        padding: 20px 26px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      header h1 {
+        margin: 0 0 6px;
+        font-size: 23px;
+      }
+      header p {
+        margin: 0;
+        color: #d5e3f1;
+        font-size: 13px;
+      }
+      .badge {
+        background: #254d70;
+        border: 1px solid #5b7894;
+        border-radius: 20px;
+        padding: 8px 12px;
+        font-size: 12px;
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: 220px minmax(0, 1fr);
+        min-height: calc(100vh - 82px);
+      }
+      nav {
+        background: white;
+        border-right: 1px solid var(--border);
+        padding: 18px 12px;
+      }
+      nav button {
+        display: block;
+        width: 100%;
+        border: 0;
+        background: transparent;
+        text-align: left;
+        padding: 12px 14px;
+        margin-bottom: 5px;
+        color: #43556a;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+      }
+      nav button.active,
+      nav button:hover {
+        background: var(--light-blue);
+        color: var(--blue);
+        font-weight: bold;
+      }
+      main {
+        padding: 24px;
+        min-width: 0;
+      }
+      .page {
+        display: none;
+      }
+      .page.active {
+        display: block;
+      }
+      .page-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+      }
+      h2 {
+        margin: 0;
+        font-size: 22px;
+      }
+      .subtitle {
+        margin: 6px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(140px, 1fr));
+        gap: 14px;
+        margin-bottom: 20px;
+      }
+      .card,
+      .panel {
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 18px;
+        box-shadow: 0 2px 7px rgba(25, 48, 75, 0.03);
+      }
+      .card .label {
+        color: var(--muted);
+        font-size: 12px;
+        margin-bottom: 10px;
+      }
+      .card .value {
+        font-size: 25px;
+        font-weight: bold;
+      }
+      .card .hint {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 7px;
+      }
+      .panel {
+        margin-bottom: 18px;
+        min-width: 0;
+        container-type: inline-size;
+      }
+      .panel h3 {
+        margin: 0 0 14px;
+        font-size: 16px;
+      }
+      .grid-two {
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+        gap: 16px;
+      }
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 13px;
+      }
+      .field {
+        min-width: 0;
+      }
+      .field input,
+      .field select {
+        display: block;
+        width: 100%;
+        min-width: 0;
+      }
+      .field.full {
+        grid-column: 1 / -1;
+      }
+      @container (max-width: 420px) {
+        .form-grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .field.full {
+          grid-column: auto;
+        }
+      }
+      label {
+        display: block;
+        font-size: 12px;
+        color: #526276;
+        margin-bottom: 6px;
+      }
+      input,
+      select,
+      textarea {
+        width: 100%;
+        border: 1px solid #cbd6e2;
+        border-radius: 7px;
+        padding: 10px;
+        font: inherit;
+        font-size: 13px;
+        background: white;
+        color: var(--text);
+      }
+      input:focus,
+      select:focus {
+        outline: 2px solid #c5dcf7;
+        border-color: var(--blue);
+      }
+      .field.full {
+        grid-column: 1 / -1;
+      }
+      .btn {
+        border: 0;
+        background: var(--blue);
+        color: white;
+        border-radius: 7px;
+        padding: 10px 14px;
+        font-size: 13px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+      .btn:hover {
+        filter: brightness(0.94);
+      }
+      .btn.secondary {
+        background: #e8eef5;
+        color: #34495e;
+      }
+      .btn.danger {
+        background: #fbe9e9;
+        color: var(--red);
+      }
+      .actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 15px;
+      }
+      .table-wrap {
+        width: 100%;
+        overflow-x: auto;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 13px;
+      }
+      th,
+      td {
+        padding: 12px 10px;
+        text-align: left;
+        border-bottom: 1px solid #e7edf4;
+        white-space: nowrap;
+      }
+      th {
+        color: #586a7d;
+        background: #f8fafc;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      tbody tr:hover {
+        background: #fafcff;
+      }
+      .pill {
+        display: inline-block;
+        padding: 5px 8px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: bold;
+        background: #e9f7ef;
+        color: var(--green);
+      }
+      .pill.low {
+        background: #fff3df;
+        color: var(--orange);
+      }
+      .pill.pending {
+        background: #eaf2fb;
+        color: var(--blue);
+      }
+      .empty {
+        color: var(--muted);
+        padding: 20px 8px;
+        text-align: center;
+      }
+      .notice {
+        padding: 12px 14px;
+        border-radius: 8px;
+        background: #fff8e8;
+        color: #79521b;
+        font-size: 12px;
+        line-height: 1.5;
+        margin-bottom: 16px;
+      }
+      .total-box {
+        background: #f7faff;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 12px;
+        margin-top: 12px;
+        font-size: 13px;
+      }
+      .total-box div {
+        display: flex;
+        justify-content: space-between;
+        margin: 5px 0;
+      }
+      .total-box .grand {
+        border-top: 1px solid var(--border);
+        padding-top: 9px;
+        margin-top: 9px;
+        font-weight: bold;
+        font-size: 15px;
+      }
+      .bar {
+        height: 8px;
+        background: #e8eef5;
+        border-radius: 20px;
+        overflow: hidden;
+        margin-top: 8px;
+      }
+      .bar span {
+        display: block;
+        height: 100%;
+        background: var(--blue);
+      }
+      footer {
+        color: var(--muted);
+        font-size: 11px;
+        padding: 12px 2px;
+      }
+      @media (max-width: 900px) {
+        .cards {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .grid-two {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+      @media (max-width: 650px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+        nav {
+          display: flex;
+          overflow-x: auto;
+          border-right: 0;
+          border-bottom: 1px solid var(--border);
+          padding: 8px;
+        }
+        nav button {
+          min-width: max-content;
+          margin: 0 4px 0 0;
+        }
+        main {
+          padding: 15px;
+        }
+        .cards {
+          grid-template-columns: 1fr 1fr;
+          gap: 9px;
+        }
+        .card {
+          padding: 13px;
+        }
+        .card .value {
+          font-size: 20px;
+        }
+        .form-grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .field.full {
+          grid-column: auto;
+        }
+        .page-title > div {
+          min-width: 0;
+        }
+        input,
+        select,
+        textarea {
+          max-width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div>
+        <h1>Procurement & Inventory</h1>
+        <p>Small Manufacturer · GST</p>
+      </div>
+    </header>
+
+    <div class="layout">
+      <nav aria-label="Main navigation">
+        <button class="active" data-page="dashboard">Dashboard</button>
+        <button data-page="purchase">Purchase Orders</button>
+        <button data-page="inventory">Inventory / Stock</button>
+        <button data-page="vendors">Vendors</button>
+        <button data-page="gst">GST Calculator</button>
+        <button data-page="reports">Reports</button>
+      </nav>
+
+      <main>
+        <section class="page active" id="dashboard">
+          <div class="page-title">
+            <div>
+              <h2>Dashboard</h2>
+              <p class="subtitle">
+                Overview of purchasing, stock and GST estimates.
+              </p>
+            </div>
+            <button class="btn secondary" onclick="exportData()">
+              Export data (JSON)
+            </button>
+          </div>
+          <div class="cards">
+            <div class="card">
+              <div class="label">Purchase orders</div>
+              <div class="value" id="statOrders">0</div>
+              <div class="hint">Orders recorded</div>
+            </div>
+            <div class="card">
+              <div class="label">Inventory items</div>
+              <div class="value" id="statItems">0</div>
+              <div class="hint">Different products</div>
+            </div>
+            <div class="card">
+              <div class="label">Low-stock items</div>
+              <div class="value" id="statLow">0</div>
+              <div class="hint">At or below reorder level</div>
+            </div>
+            <div class="card">
+              <div class="label">Order value incl. GST</div>
+              <div class="value" id="statValue">₹0.00</div>
+              <div class="hint">Based on saved purchase orders</div>
+            </div>
+          </div>
+          <div class="grid-two">
+            <div class="panel">
+              <h3>Recent Purchase Orders</h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>PO Number</th>
+                      <th>Vendor</th>
+                      <th>Date</th>
+                      <th>Total</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="recentOrders"></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="panel">
+              <h3>Stock Summary</h3>
+              <div id="stockSummary"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" id="purchase">
+          <div class="page-title">
+            <div>
+              <h2>Purchase Orders</h2>
+              <p class="subtitle">
+                Create a purchase order and calculate estimated GST.
+              </p>
+            </div>
+          </div>
+          <div class="grid-two">
+            <div class="panel">
+              <h3>Create Purchase Order</h3>
+              <form id="poForm">
+                <div class="form-grid">
+                  <div class="field">
+                    <label for="poVendor">Vendor name</label
+                    ><input
+                      id="poVendor"
+                      required
+                      placeholder="e.g. ABC Electricals"
+                      pattern="[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ .'&-]*"
+                      title="Use letters, spaces, and basic name punctuation only."
+                    />
+                  </div>
+                  <div class="field">
+                    <label for="poDate">Order date</label
+                    ><input id="poDate" type="date" required />
+                  </div>
+                  <div class="field">
+                    <label for="poItem">Item / component</label
+                    ><input
+                      id="poItem"
+                      required
+                      placeholder="e.g. Copper wire"
+                      pattern="[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ .'&()/-]*"
+                      title="Use letters, spaces, and basic item-name punctuation only."
+                    />
+                  </div>
+                  <div class="field">
+                    <label for="poQty">Quantity</label
+                    ><input
+                      id="poQty"
+                      type="number"
+                      min="1"
+                      step="1"
+                      value="1"
+                      required
+                      inputmode="numeric"
+                      title="Enter whole numbers only."
+                    />
+                  </div>
+                  <div class="field">
+                    <label for="poPrice">Unit price (₹)</label
+                    ><input
+                      id="poPrice"
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value="100"
+                      required
+                      inputmode="decimal"
+                      title="Enter numbers only; decimals are allowed."
+                    />
+                  </div>
+                  <div class="field">
+                    <label for="poGst">GST rate</label
+                    ><select id="poGst">
+                      <option value="0">0%</option>
+                      <option value="5">5%</option>
+                      <option value="12">12%</option>
+                      <option value="18" selected>18%</option>
+                      <option value="28">28%</option>
+                    </select>
+                  </div>
+                  <div class="field full">
+                    <label for="poStatus">Status</label
+                    ><select id="poStatus">
+                      <option>Pending</option>
+                      <option>Approved</option>
+                      <option>Received</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="total-box" id="poPreview">
+                  <div><span>Subtotal</span><strong>₹100.00</strong></div>
+                  <div><span>Estimated GST</span><strong>₹18.00</strong></div>
+                  <div class="grand">
+                    <span>Total</span><strong>₹118.00</strong>
+                  </div>
+                </div>
+                <div class="actions">
+                  <button class="btn" type="submit">Save Purchase Order</button
+                  ><button class="btn secondary" type="button" id="clearPoForm">
+                    Clear form
+                  </button>
+                </div>
+              </form>
+            </div>
+            <div class="panel">
+              <h3>All Purchase Orders</h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>PO Number</th>
+                      <th>Vendor / Item</th>
+                      <th>Qty</th>
+                      <th>Subtotal</th>
+                      <th>GST</th>
+                      <th>Total</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="poTable"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" id="inventory">
+          <div class="page-title">
+            <div>
+              <h2>Inventory / Stock</h2>
+              <p class="subtitle">Track stock quantity and reorder levels.</p>
+            </div>
+          </div>
+          <div class="grid-two">
+            <div class="panel">
+              <h3>Add Inventory Item</h3>
+              <form id="itemForm">
+                <div class="form-grid">
+                  <div class="field full">
+                    <label for="itemName">Item name</label
+                    ><input
+                      id="itemName"
+                      required
+                      placeholder="e.g. Resistor 10K"
+                      pattern="[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ0-9 .'&()/-]*"
+                      title="Item names may contain letters, numbers, spaces, and basic punctuation."
+                    />
+                  </div>
+                  <div class="field">
+                    <label for="itemCode">Item code</label
+                    ><input
+                      id="itemCode"
+                      required
+                      placeholder="e.g. ELE-001"
+                      pattern="[A-Za-z0-9-]+"
+                      title="Use letters, numbers, and hyphens only."
+                    />
+                  </div>
+                  <div class="field">
+                    <label for="itemQty">Current quantity</label
+                    ><input
+                      id="itemQty"
+                      type="number"
+                      min="0"
+                      step="1"
+                      value="10"
+                      required
+                      inputmode="numeric"
+                      title="Enter whole numbers only."
+                    />
+                  </div>
+                  <div class="field">
+                    <label for="itemReorder">Reorder level</label
+                    ><input
+                      id="itemReorder"
+                      type="number"
+                      min="0"
+                      step="1"
+                      value="5"
+                      required
+                      inputmode="numeric"
+                      title="Enter whole numbers only."
+                    />
+                  </div>
+                  <div class="field">
+                    <label for="itemPrice">Unit cost (₹)</label
+                    ><input
+                      id="itemPrice"
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value="0"
+                      required
+                      inputmode="decimal"
+                      title="Enter numbers only; decimals are allowed."
+                    />
+                  </div>
+                </div>
+                <div class="actions">
+                  <button class="btn" type="submit">Add Item</button>
+                </div>
+              </form>
+            </div>
+            <div class="panel">
+              <h3>Current Stock</h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Code</th>
+                      <th>Item</th>
+                      <th>Qty</th>
+                      <th>Reorder level</th>
+                      <th>Unit cost</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="itemTable"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" id="vendors">
+          <div class="page-title">
+            <div>
+              <h2>Vendors</h2>
+              <p class="subtitle">Maintain a basic supplier list.</p>
+            </div>
+          </div>
+          <div class="grid-two">
+            <div class="panel">
+              <h3>Add Vendor</h3>
+              <form id="vendorForm">
+                <div class="form-grid">
+                  <div class="field full">
+                    <label for="vendorName">Vendor / company name</label
+                    ><input
+                      id="vendorName"
+                      required
+                      placeholder="ABC Electricals"
+                      pattern="[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ .'&-]*"
+                      title="Use letters, spaces, and basic company-name punctuation only."
+                    />
+                  </div>
+                  <div class="field">
+                    <label for="vendorContact">Contact person</label
+                    ><input
+                      id="vendorContact"
+                      placeholder="Contact name"
+                      pattern="[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ .'-]*"
+                      title="Use letters and spaces only."
+                    />
+                  </div>
+                  <div class="field">
+                    <label for="vendorPhone">Phone number</label
+                    ><input
+                      id="vendorPhone"
+                      type="tel"
+                      placeholder="Phone number"
+                      inputmode="numeric"
+                      maxlength="15"
+                      pattern="[0-9]{7,15}"
+                      title="Enter 7 to 15 digits only, without spaces or symbols."
+                    />
+                  </div>
+                  <div class="field full">
+                    <label for="vendorGstin">GSTIN (optional)</label
+                    ><input
+                      id="vendorGstin"
+                      maxlength="15"
+                      placeholder="15-character GSTIN"
+                      pattern="[A-Za-z0-9]{15}"
+                      title="GSTIN contains 15 letters and numbers."
+                    />
+                  </div>
+                </div>
+                <div class="actions">
+                  <button class="btn" type="submit">Save Vendor</button>
+                </div>
+              </form>
+            </div>
+            <div class="panel">
+              <h3>Vendor Directory</h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Vendor</th>
+                      <th>Contact</th>
+                      <th>Phone</th>
+                      <th>GSTIN</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="vendorTable"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="page" id="gst">
+          <div class="page-title">
+            <div>
+              <h2>GST Calculator</h2>
+              <p class="subtitle">Estimate tax on a purchase amount.</p>
+            </div>
+          </div>
+          <div class="panel" style="max-width: 650px">
+            <h3>Calculate GST</h3>
+            <div class="form-grid">
+              <div class="field">
+                <label for="gstAmount">Amount before GST (₹)</label
+                ><input
+                  id="gstAmount"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value="1000"
+                  inputmode="decimal"
+                  title="Enter numbers only; decimals are allowed."
+                />
+              </div>
+              <div class="field">
+                <label for="gstRate">GST rate</label
+                ><select id="gstRate">
+                  <option value="0">0%</option>
+                  <option value="5">5%</option>
+                  <option value="12">12%</option>
+                  <option value="18" selected>18%</option>
+                  <option value="28">28%</option>
+                </select>
+              </div>
+              <div class="field full">
+                <label for="gstType">Transaction type</label
+                ><select id="gstType">
+                  <option value="intra">
+                    Within the same state (CGST + SGST)
+                  </option>
+                  <option value="inter">Between states (IGST)</option>
+                </select>
+              </div>
+            </div>
+            <div class="total-box" id="gstResult"></div>
+            <p class="subtitle">
+              This calculator is an educational estimate only. Confirm the
+              applicable rate and tax treatment for the item and transaction.
+            </p>
+          </div>
+        </section>
+
+        <section class="page" id="reports">
+          <div class="page-title">
+            <div>
+              <h2>Reports</h2>
+              <p class="subtitle">Simple summaries .</p>
+            </div>
+            <button class="btn" onclick="downloadCSV()">
+              Download Purchase Orders CSV
+            </button>
+          </div>
+          <div class="cards">
+            <div class="card">
+              <div class="label">Subtotal</div>
+              <div class="value" id="reportSubtotal">₹0.00</div>
+            </div>
+            <div class="card">
+              <div class="label">Estimated GST</div>
+              <div class="value" id="reportGst">₹0.00</div>
+            </div>
+            <div class="card">
+              <div class="label">Total incl. GST</div>
+              <div class="value" id="reportTotal">₹0.00</div>
+            </div>
+            <div class="card">
+              <div class="label">Vendors</div>
+              <div class="value" id="reportVendors">0</div>
+            </div>
+          </div>
+          <div class="panel">
+            <h3>Stock Valuation Estimate</h3>
+            <p id="stockValue">Estimated inventory value: ₹0.00</p>
+            <p class="subtitle">
+              Calculated as current quantity × unit cost for each item entered.
+            </p>
+          </div>
+          <div class="panel">
+            <h3>Data backup</h3>
+            <p class="subtitle">
+              Export your browser data as JSON to keep a backup. Clearing
+              browser data may remove saved records.
+            </p>
+            <div class="actions">
+              <button class="btn secondary" onclick="exportData()">
+                Export JSON backup</button
+              ><button class="btn danger" onclick="resetAll()">
+                Delete all demo data
+              </button>
+            </div>
+          </div>
+        </section>
+        <footer>
+          Procurement & Inventory Demo · HTML, CSS and JavaScript ·
+        </footer>
+      </main>
+    </div>
+
+    <script>
+      const STORAGE_KEY = "procurementInventoryDemo_v1";
+      const today = new Date().toISOString().slice(0, 10);
+      document.getElementById("poDate").value = today;
+
+      let data = loadData();
+      function loadData() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+          return saved && saved.orders && saved.items && saved.vendors
+            ? saved
+            : { orders: [], items: [], vendors: [] };
+        } catch {
+          return { orders: [], items: [], vendors: [] };
+        }
+      }
+      function saveData() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        renderAll();
+      }
+      function money(n) {
+        return new Intl.NumberFormat("en-IN", {
+          style: "currency",
+          currency: "INR",
+        }).format(Number(n) || 0);
+      }
+      function escapeHtml(value) {
+        return String(value ?? "").replace(
+          /[&<>"']/g,
+          (ch) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[ch],
+        );
+      }
+      function showPage(pageId) {
+        document
+          .querySelectorAll(".page")
+          .forEach((p) => p.classList.toggle("active", p.id === pageId));
+        document
+          .querySelectorAll("nav button")
+          .forEach((b) =>
+            b.classList.toggle("active", b.dataset.page === pageId),
+          );
+      }
+      document
+        .querySelectorAll("nav button")
+        .forEach((button) =>
+          button.addEventListener("click", () => showPage(button.dataset.page)),
+        );
+
+      function calcPO() {
+        const subtotal =
+          Math.max(0, Number(document.getElementById("poQty").value) || 0) *
+          Math.max(0, Number(document.getElementById("poPrice").value) || 0);
+        const rate = Number(document.getElementById("poGst").value) || 0;
+        const tax = (subtotal * rate) / 100;
+        document.getElementById("poPreview").innerHTML =
+          `<div><span>Subtotal</span><strong>${money(subtotal)}</strong></div><div><span>Estimated GST (${rate}%)</span><strong>${money(tax)}</strong></div><div class="grand"><span>Total</span><strong>${money(subtotal + tax)}</strong></div>`;
+      }
+      ["poQty", "poPrice", "poGst"].forEach((id) =>
+        document.getElementById(id).addEventListener("input", calcPO),
+      );
+      // Clear every purchase-order input explicitly. Native form reset restores default
+      // values (such as quantity 1 and price 100), which can look like it did not clear.
+      document.getElementById("clearPoForm").addEventListener("click", () => {
+        document.getElementById("poVendor").value = "";
+        document.getElementById("poDate").value = today;
+        document.getElementById("poItem").value = "";
+        document.getElementById("poQty").value = "";
+        document.getElementById("poPrice").value = "";
+        document.getElementById("poGst").value = "18";
+        document.getElementById("poStatus").value = "Pending";
+        calcPO();
+        document.getElementById("poVendor").focus();
+      });
+      document.getElementById("poForm").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const qty = Number(document.getElementById("poQty").value);
+        const price = Number(document.getElementById("poPrice").value);
+        const rate = Number(document.getElementById("poGst").value);
+        const subtotal = qty * price;
+        const tax = (subtotal * rate) / 100;
+        const order = {
+          id: "PO-" + String(Date.now()).slice(-6),
+          vendor: document.getElementById("poVendor").value.trim(),
+          date: document.getElementById("poDate").value,
+          item: document.getElementById("poItem").value.trim(),
+          qty,
+          price,
+          rate,
+          subtotal,
+          tax,
+          total: subtotal + tax,
+          status: document.getElementById("poStatus").value,
+        };
+        data.orders.unshift(order);
+        if (
+          !data.vendors.some(
+            (v) => v.name.toLowerCase() === order.vendor.toLowerCase(),
+          )
+        )
+          data.vendors.push({
+            name: order.vendor,
+            contact: "",
+            phone: "",
+            gstin: "",
+          });
+        if (order.status === "Received") {
+          const stock = data.items.find(
+            (i) => i.name.toLowerCase() === order.item.toLowerCase(),
+          );
+          if (stock) stock.qty += qty;
+          else
+            data.items.push({
+              name: order.item,
+              code: "AUTO-" + String(Date.now()).slice(-4),
+              qty,
+              reorder: 5,
+              price,
+            });
+        }
+        saveData();
+        event.target.reset();
+        document.getElementById("poDate").value = today;
+        calcPO();
+        showPage("purchase");
+      });
+
+      document
+        .getElementById("itemForm")
+        .addEventListener("submit", (event) => {
+          event.preventDefault();
+          const code = document.getElementById("itemCode").value.trim();
+          if (
+            data.items.some((i) => i.code.toLowerCase() === code.toLowerCase())
+          ) {
+            alert(
+              "That item code already exists. Please use a different code.",
+            );
+            return;
+          }
+          data.items.push({
+            name: document.getElementById("itemName").value.trim(),
+            code,
+            qty: Number(document.getElementById("itemQty").value),
+            reorder: Number(document.getElementById("itemReorder").value),
+            price: Number(document.getElementById("itemPrice").value),
+          });
+          saveData();
+          event.target.reset();
+        });
+
+      document
+        .getElementById("vendorForm")
+        .addEventListener("submit", (event) => {
+          event.preventDefault();
+          const name = document.getElementById("vendorName").value.trim();
+          if (
+            data.vendors.some(
+              (v) => v.name.toLowerCase() === name.toLowerCase(),
+            )
+          ) {
+            alert("This vendor is already listed.");
+            return;
+          }
+          data.vendors.push({
+            name,
+            contact: document.getElementById("vendorContact").value.trim(),
+            phone: document.getElementById("vendorPhone").value.trim(),
+            gstin: document.getElementById("vendorGstin").value.trim(),
+          });
+          saveData();
+          event.target.reset();
+        });
+
+      function deleteRecord(type, index) {
+        if (!confirm("Delete this record?")) return;
+        data[type].splice(index, 1);
+        saveData();
+      }
+      function renderAll() {
+        const total = data.orders.reduce((sum, o) => sum + o.total, 0);
+        const subtotal = data.orders.reduce((sum, o) => sum + o.subtotal, 0);
+        const tax = data.orders.reduce((sum, o) => sum + o.tax, 0);
+        const lowItems = data.items.filter((i) => i.qty <= i.reorder);
+        document.getElementById("statOrders").textContent = data.orders.length;
+        document.getElementById("statItems").textContent = data.items.length;
+        document.getElementById("statLow").textContent = lowItems.length;
+        document.getElementById("statValue").textContent = money(total);
+        document.getElementById("recentOrders").innerHTML =
+          data.orders
+            .slice(0, 5)
+            .map(
+              (o) =>
+                `<tr><td>${escapeHtml(o.id)}</td><td>${escapeHtml(o.vendor)}</td><td>${escapeHtml(o.date)}</td><td>${money(o.total)}</td><td><span class="pill ${o.status === "Pending" ? "pending" : ""}">${escapeHtml(o.status)}</span></td></tr>`,
+            )
+            .join("") ||
+          `<tr><td colspan="5" class="empty">No purchase orders yet.</td></tr>`;
+        document.getElementById("poTable").innerHTML =
+          data.orders
+            .map(
+              (o, i) =>
+                `<tr><td>${escapeHtml(o.id)}</td><td>${escapeHtml(o.vendor)}<br><small>${escapeHtml(o.item)}</small></td><td>${o.qty}</td><td>${money(o.subtotal)}</td><td>${money(o.tax)} (${o.rate}%)</td><td>${money(o.total)}</td><td><span class="pill ${o.status === "Pending" ? "pending" : ""}">${escapeHtml(o.status)}</span></td><td><button class="btn danger" onclick="deleteRecord('orders',${i})">Delete</button></td></tr>`,
+            )
+            .join("") ||
+          `<tr><td colspan="8" class="empty">No orders recorded.</td></tr>`;
+        document.getElementById("itemTable").innerHTML =
+          data.items
+            .map(
+              (item, i) =>
+                `<tr><td>${escapeHtml(item.code)}</td><td>${escapeHtml(item.name)}</td><td>${item.qty}</td><td>${item.reorder}</td><td>${money(item.price)}</td><td><span class="pill ${item.qty <= item.reorder ? "low" : ""}">${item.qty <= item.reorder ? "Reorder" : "In stock"}</span></td><td><button class="btn secondary" onclick="adjustStock(${i},-1)">−</button> <button class="btn secondary" onclick="adjustStock(${i},1)">+</button> <button class="btn danger" onclick="deleteRecord('items',${i})">Delete</button></td></tr>`,
+            )
+            .join("") ||
+          `<tr><td colspan="7" class="empty">No inventory items yet.</td></tr>`;
+        document.getElementById("vendorTable").innerHTML =
+          data.vendors
+            .map(
+              (v, i) =>
+                `<tr><td>${escapeHtml(v.name)}</td><td>${escapeHtml(v.contact || "—")}</td><td>${escapeHtml(v.phone || "—")}</td><td>${escapeHtml(v.gstin || "—")}</td><td><button class="btn danger" onclick="deleteRecord('vendors',${i})">Delete</button></td></tr>`,
+            )
+            .join("") ||
+          `<tr><td colspan="5" class="empty">No vendors yet.</td></tr>`;
+        document.getElementById("stockSummary").innerHTML =
+          data.items
+            .slice(0, 6)
+            .map(
+              (i) =>
+                `<div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;gap:10px;font-size:13px"><span>${escapeHtml(i.name)}</span><strong>${i.qty} units</strong></div><div class="bar"><span style="width:${Math.min(100, (i.qty / Math.max(1, i.reorder * 2)) * 100)}%;background:${i.qty <= i.reorder ? "#d18a26" : "#2463a6"}"></span></div></div>`,
+            )
+            .join("") ||
+          `<p class="empty">Add inventory items to see stock levels.</p>`;
+        document.getElementById("reportSubtotal").textContent = money(subtotal);
+        document.getElementById("reportGst").textContent = money(tax);
+        document.getElementById("reportTotal").textContent = money(total);
+        document.getElementById("reportVendors").textContent =
+          data.vendors.length;
+        document.getElementById("stockValue").textContent =
+          "Estimated inventory value: " +
+          money(data.items.reduce((sum, i) => sum + i.qty * i.price, 0));
+      }
+      function adjustStock(index, change) {
+        if (data.items[index].qty + change < 0) {
+          alert("Stock quantity cannot be negative.");
+          return;
+        }
+        data.items[index].qty += change;
+        saveData();
+      }
+
+      function calculateGST() {
+        const amount = Math.max(
+          0,
+          Number(document.getElementById("gstAmount").value) || 0,
+        );
+        const rate = Number(document.getElementById("gstRate").value) || 0;
+        const tax = (amount * rate) / 100;
+        const intra = document.getElementById("gstType").value === "intra";
+        const parts = intra
+          ? `<div><span>CGST (${rate / 2}%)</span><strong>${money(tax / 2)}</strong></div><div><span>SGST (${rate / 2}%)</span><strong>${money(tax / 2)}</strong></div>`
+          : `<div><span>IGST (${rate}%)</span><strong>${money(tax)}</strong></div>`;
+        document.getElementById("gstResult").innerHTML =
+          `<div><span>Amount before GST</span><strong>${money(amount)}</strong></div>${parts}<div><span>Total GST</span><strong>${money(tax)}</strong></div><div class="grand"><span>Amount including GST</span><strong>${money(amount + tax)}</strong></div>`;
+      }
+      ["gstAmount", "gstRate", "gstType"].forEach((id) =>
+        document.getElementById(id).addEventListener("input", calculateGST),
+      );
+
+      function exportData() {
+        const blob = new Blob([JSON.stringify(data, null, 2)], {
+          type: "application/json",
+        });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "procurement-inventory-backup.json";
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+      function downloadCSV() {
+        const rows = [
+          [
+            "PO Number",
+            "Vendor",
+            "Date",
+            "Item",
+            "Quantity",
+            "Unit Price",
+            "Subtotal",
+            "GST Rate",
+            "GST Amount",
+            "Total",
+            "Status",
+          ],
+        ];
+        data.orders.forEach((o) =>
+          rows.push([
+            o.id,
+            o.vendor,
+            o.date,
+            o.item,
+            o.qty,
+            o.price.toFixed(2),
+            o.subtotal.toFixed(2),
+            o.rate + "%",
+            o.tax.toFixed(2),
+            o.total.toFixed(2),
+            o.status,
+          ]),
+        );
+        const csv = rows
+          .map((row) =>
+            row
+              .map((value) => `"${String(value).replace(/"/g, '""')}"`)
+              .join(","),
+          )
+          .join("\r\n");
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "purchase-orders.csv";
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+      function resetAll() {
+        if (
+          !confirm(
+            "This will permanently delete all demo records saved in this browser. Continue?",
+          )
+        )
+          return;
+        data = { orders: [], items: [], vendors: [] };
+        saveData();
+      }
+      // Live input rules: names allow letters/spaces and common punctuation;
+      // codes allow letters/numbers/hyphens; phone allows digits; GSTIN is alphanumeric.
+      function filterInput(id, regex, uppercase = false) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener("input", () => {
+          const start = el.selectionStart;
+          const before = el.value;
+          let after = before.replace(regex, "");
+          if (uppercase) after = after.toUpperCase();
+          if (after !== before) {
+            el.value = after;
+            try {
+              el.setSelectionRange(
+                Math.max(0, start - (before.length - after.length)),
+                Math.max(0, start - (before.length - after.length)),
+              );
+            } catch {}
+          }
+        });
+      }
+      // Remove characters that are not allowed as the user types/pastes.
+      filterInput("poVendor", /[^A-Za-zÀ-ÿ .&'-]/g);
+      filterInput("poItem", /[^A-Za-zÀ-ÿ .&()\/'-]/g);
+      filterInput("itemName", /[^A-Za-zÀ-ÿ0-9 .&()\/'-]/g);
+      filterInput("itemCode", /[^A-Za-z0-9-]/g, true);
+      filterInput("vendorName", /[^A-Za-zÀ-ÿ .&'-]/g);
+      filterInput("vendorContact", /[^A-Za-zÀ-ÿ .'-]/g);
+      filterInput("vendorPhone", /[^0-9]/g);
+      filterInput("vendorGstin", /[^A-Za-z0-9]/g, true);
+
+      // Validate before saving, including a 15-character GSTIN if supplied.
+      document
+        .getElementById("vendorForm")
+        .addEventListener("submit", (event) => {
+          const gstin = document.getElementById("vendorGstin").value.trim();
+          if (gstin && !/^[A-Z0-9]{15}$/.test(gstin)) {
+            event.preventDefault();
+            alert("GSTIN must contain exactly 15 letters and numbers.");
+            document.getElementById("vendorGstin").focus();
+          }
+          const phone = document.getElementById("vendorPhone").value.trim();
+          if (phone && !/^[0-9]{7,15}$/.test(phone)) {
+            event.preventDefault();
+            alert("Phone number must contain 7 to 15 digits only.");
+            document.getElementById("vendorPhone").focus();
+          }
+        });
+
+      document
+        .getElementById("gstAmount")
+        .addEventListener("input", calculateGST);
+      renderAll();
+      calcPO();
+      calculateGST();
+    </script>
+  </body>
+</html>
